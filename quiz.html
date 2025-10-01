@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Quiz — L3 Computing</title>
+<link rel="stylesheet" href="css/styles.css" />
+<script type="module" src="js/quiz.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title">
+      <span class="badge">L3</span>
+      <h1>Quiz</h1>
+    </div>
+    <nav><a href="index.html">Home</a> <a href="revision.html">Revision</a> <a href="online.html">Online</a></nav>
+  </header>
+
+  <div id="setup" class="grid">
+    <div class="card section">
+      <h2>Choose your challenge</h2>
+      <div class="row">
+        <label>Play Type
+          <select id="playType">
+            <option value="single">Single Player</option>
+            <option value="local">Local Multiplayer (Pass & Play)</option>
+          </select>
+        </label>
+        <div id="localSetup" class="hidden">
+          <div class="row" style="margin:0">
+            <label>Players (2–6)
+              <input id="localCount" type="number" min="2" max="6" value="2" />
+            </label>
+            <div></div>
+          </div>
+          <div id="localNames" class="row" style="margin-top:8px"></div>
+        </div>
+      </div>
+      <div class="row">
+        <label>Category
+          <select id="category">
+            <option value="all">All topics</option>
+            <option value="U1: Principles of CS">U1: Principles of CS</option>
+            <option value="U2: Computer Systems">U2: Computer Systems</option>
+            <option value="U3: Project Mgmt">U3: Project Mgmt</option>
+            <option value="U4: Software Dev Project">U4: Software Dev Project</option>
+            <option value="U6: Web Dev">U6: Web Dev</option>
+            <option value="U11: Cyber Security">U11: Cyber Security</option>
+            <option value="U13: Databases">U13: Databases</option>
+          </select>
+        </label>
+        <label>Learning Aim
+          <select id="aim">
+            <option value="all">All</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label>Difficulty
+          <select id="difficulty">
+            <option value="mix">Mixed</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </label>
+        <label>Seconds per question
+          <input id="secs" type="number" min="10" max="120" step="5" value="30" />
+        </label>
+      </div>
+      <div class="row">
+        <label>Number of questions
+          <input id="qty" type="number" min="5" max="50" step="1" value="12" />
+        </label>
+      </div>
+      <div style="margin-top:8px">
+        <button id="start" class="btn-cta">Start ▶</button>
+        <a href="index.html" style="margin-left:8px"><button>Back</button></a>
+      </div>
+      <p class="muted" style="margin-top:8px">Shortcuts: 1–4 answers, <span class="kbd">H</span> hint, <span class="kbd">F</span> 50/50, <span class="kbd">S</span> skip.</p>
+    </div>
+    <div class="card section">
+      <h2>Leaderboard (device)</h2>
+      <table id="board"><thead><tr><th>#</th><th>Name</th><th>Score</th><th>When</th></tr></thead><tbody></tbody></table>
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <button id="resetBoard">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="game" class="card section hidden">
+    <div class="progress"><span id="bar"></span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0">
+      <div id="turnTag" class="muted"></div>
+      <div><span id="streak">🔥 0</span> · <strong id="score">0</strong> pts</div>
+    </div>
+
+    <div id="scorePanel" class="hidden" style="margin:-6px 0 10px">
+      <div class="qbox">
+        <div class="pill">Multiplayer Scores</div>
+        <div id="scoreRows" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:8px"></div>
+      </div>
+    </div>
+
+    <div class="qbox">
+      <div class="pill" id="meta"></div>
+      <p id="qtext" style="font-size:20px;line-height:1.4;margin:8px 0">Question</p>
+      <div class="options" id="options"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button id="hintBtn">💡 Hint</button>
+        <button id="fiftyBtn">🧠 50/50</button>
+        <button id="skipBtn">⏭️ Skip</button>
+        <span class="muted">· <span id="qpos">1/10</span></span>
+        <div class="pill" style="margin-left:auto">⏱️ <span id="timeLeft">30</span>s</div>
+      </div>
+      <p id="explain" class="muted"></p>
+    </div>
+  </div>
+
+  <div id="end" class="card section hidden" style="text-align:center">
+    <h2>Quiz complete 🎉</h2>
+    <p id="final"></p>
+    <div class="row" style="margin-top:10px">
+      <label>Save to leaderboard
+        <input id="playerName" type="text" maxlength="20" placeholder="O.G."/>
+      </label>
+      <div style="display:flex;align-items:end;gap:8px">
+        <button id="saveScore" class="btn-cta">Save score</button>
+        <a href="quiz.html"><button>Play again</button></a>
+      </div>
+    </div>
+  </div>
+
+  <footer><a href="index.html">Back to Home</a></footer>
+</div>
+</body>
+</html>

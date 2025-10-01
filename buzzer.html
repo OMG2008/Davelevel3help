@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Buzzer Mode — L3 Computing</title>
+<link rel="stylesheet" href="css/styles.css" />
+<script type="module" src="js/buzzer.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title"><span class="badge">L3</span><h1>Buzzer — Fastest Finger</h1></div>
+    <nav><a href="index.html">Home</a> <a href="quiz.html">Quiz</a> <a href="revision.html">Revision</a> <a href="online.html">Online</a></nav>
+  </header>
+
+  <div id="setup" class="card section">
+    <div class="row">
+      <label>Players (2–8)
+        <input id="pCount" type="number" min="2" max="8" value="3" />
+      </label>
+      <label>Seconds per question
+        <input id="qSecs" type="number" min="10" max="90" value="25" />
+      </label>
+    </div>
+    <div class="row">
+      <label>Category
+        <select id="category">
+          <option value="all">All topics</option>
+          <option value="U1: Principles of CS">U1: Principles of CS</option>
+          <option value="U2: Computer Systems">U2: Computer Systems</option>
+          <option value="U3: Project Mgmt">U3: Project Mgmt</option>
+          <option value="U4: Software Dev Project">U4: Software Dev Project</option>
+          <option value="U6: Web Dev">U6: Web Dev</option>
+          <option value="U11: Cyber Security">U11: Cyber Security</option>
+          <option value="U13: Databases">U13: Databases</option>
+        </select>
+      </label>
+      <label>Learning Aim
+        <select id="aim">
+          <option value="all">All</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+        </select>
+      </label>
+    </div>
+    <div class="row">
+      <label>Questions
+        <input id="qty" type="number" min="5" max="50" step="1" value="12" />
+      </label>
+      <label>Difficulty
+        <select id="difficulty">
+          <option value="mix">Mixed</option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </label>
+    </div>
+    <div style="margin-top:8px">
+      <button id="start" class="btn-cta">Start ▶</button>
+      <a href="index.html" style="margin-left:8px"><button>Back</button></a>
+    </div>
+    <p class="muted" style="margin-top:8px">Buzz keys are shown after you start. First to buzz answers within 5s. Wrong = lockout.</p>
+  </div>
+
+  <div id="game" class="card section hidden">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div class="progress"><span id="bar"></span></div>
+      <div class="pill">⏱️ <span id="timeLeft">25</span>s</div>
+    </div>
+    <div class="qbox" style="margin-top:10px">
+      <div id="tags" class="pill"></div>
+      <p id="qtext" style="font-size:20px;line-height:1.4;margin:8px 0">Question</p>
+      <div id="opts" class="options"></div>
+      <p id="info" class="muted"></p>
+    </div>
+    <div id="players" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px"></div>
+    <div style="margin-top:10px"><button id="nextQ" class="btn-cta hidden">Next question →</button></div>
+  </div>
+</div>
+</body>
+</html>

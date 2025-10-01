@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Revision — L3 Computing</title>
+<link rel="stylesheet" href="css/styles.css" />
+<script type="module" src="js/revision.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title">
+      <span class="badge">L3</span>
+      <h1>Revision (Flashcards)</h1>
+    </div>
+    <nav><a href="index.html">Home</a> <a href="quiz.html">Quiz</a> <a href="online.html">Online</a></nav>
+  </header>
+
+  <div id="setup" class="card section">
+    <div class="row">
+      <label>Category
+        <select id="category">
+          <option value="all">All topics</option>
+          <option value="U1: Principles of CS">U1: Principles of CS</option>
+          <option value="U2: Computer Systems">U2: Computer Systems</option>
+          <option value="U3: Project Mgmt">U3: Project Mgmt</option>
+          <option value="U4: Software Dev Project">U4: Software Dev Project</option>
+          <option value="U6: Web Dev">U6: Web Dev</option>
+          <option value="U11: Cyber Security">U11: Cyber Security</option>
+          <option value="U13: Databases">U13: Databases</option>
+        </select>
+      </label>
+      <label>Learning Aim
+        <select id="aim">
+          <option value="all">All</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+        </select>
+      </label>
+    </div>
+    <div style="margin-top:8px"><button id="start" class="btn-cta">Start ▶</button></div>
+  </div>
+
+  <div id="rev" class="section card hidden">
+    <div class="pill">Leitner boxes: <span id="leitnerCounts">1:0 • 2:0 • 3:0 • 4:0 • 5:0</span></div>
+    <div class="qbox" style="margin-top:10px">
+      <div id="fcTags"></div>
+      <p id="fcFront" style="font-size:20px;line-height:1.4;margin:8px 0">Flashcard front</p>
+      <p id="fcBack" class="muted hidden">Back/answer</p>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button id="fcShow">Show answer</button>
+        <button id="fcEasy" class="btn-cta" disabled>Easy</button>
+        <button id="fcHard" disabled>Hard</button>
+        <span class="muted">· <span id="fcProg">0/0</span></span>
+      </div>
+    </div>
+  </div>
+
+  <footer><a href="index.html">Back to Home</a></footer>
+</div>
+</body>
+</html>

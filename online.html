@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Online Multiplayer — L3 Computing</title>
+<link rel="stylesheet" href="css/styles.css" />
+<script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script type="module" src="js/online.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title">
+      <span class="badge">L3</span>
+      <h1>Online Multiplayer</h1>
+    </div>
+    <nav><a href="index.html">Home</a> <a href="quiz.html">Quiz</a> <a href="revision.html">Revision</a></nav>
+  </header>
+
+  <div class="card section">
+    <h2>Room</h2>
+    <div class="row">
+      <label>Role
+        <select id="onlineRole">
+          <option value="host">Host a Room</option>
+          <option value="join">Join a Room</option>
+        </select>
+      </label>
+      <label>Nickname
+        <input id="nick" type="text" placeholder="Player" />
+      </label>
+    </div>
+    <div class="row">
+      <label>Room Code
+        <input id="roomCode" type="text" placeholder="e.g. L3-ABCD" />
+      </label>
+      <div style="display:flex;align-items:end;gap:8px">
+        <button id="createRoom">Create Room</button>
+        <button id="joinRoom">Join Room</button>
+        <button id="hostStart" class="btn-cta">Host: Start</button>
+        <button id="hostNext">Host: Next</button>
+      </div>
+    </div>
+    <div class="pill">Players in room: <span id="onlinePlayers">0</span></div>
+  </div>
+
+  <div class="card section">
+    <h2>Settings</h2>
+    <div class="row">
+      <label>Category
+        <select id="category">
+          <option value="all">All topics</option>
+          <option value="U1: Principles of CS">U1: Principles of CS</option>
+          <option value="U2: Computer Systems">U2: Computer Systems</option>
+          <option value="U3: Project Mgmt">U3: Project Mgmt</option>
+          <option value="U4: Software Dev Project">U4: Software Dev Project</option>
+          <option value="U6: Web Dev">U6: Web Dev</option>
+          <option value="U11: Cyber Security">U11: Cyber Security</option>
+          <option value="U13: Databases">U13: Databases</option>
+        </select>
+      </label>
+      <label>Learning Aim
+        <select id="aim">
+          <option value="all">All</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+        </select>
+      </label>
+    </div>
+    <div class="row">
+      <label>Difficulty
+        <select id="difficulty">
+          <option value="mix">Mixed</option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </label>
+      <label>Questions
+        <input id="qty" type="number" min="5" max="50" step="1" value="10" />
+      </label>
+    </div>
+  </div>
+
+  <div id="game" class="card section hidden">
+    <div class="progress"><span id="bar"></span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0">
+      <div id="turnTag" class="muted">Online battle</div>
+      <div class="pill">Players: <span id="playersList"></span></div>
+    </div>
+    <div class="qbox">
+      <div class="pill" id="meta"></div>
+      <p id="qtext" style="font-size:20px;line-height:1.4;margin:8px 0">Question</p>
+      <div class="options" id="options"></div>
+      <div class="muted">Question <span id="qpos">1</span></div>
+      <p id="explain" class="muted"></p>
+    </div>
+  </div>
+
+  <footer><a href="index.html">Back to Home</a></footer>
+</div>
+</body>
+</html>
