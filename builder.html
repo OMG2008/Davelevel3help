@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Past Paper Builder — Dave Level 3</title>
+<link rel="stylesheet" href="css/styles.css" />
+<script type="module" src="js/theme.js"></script>
+<script type="module" src="js/builder.js" defer></script>
+<style>
+.viewers{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.viewer{position:relative;border:1px solid #22304c;border-radius:12px;overflow:hidden;background:#0f1626}
+.viewer header{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px;border-bottom:1px solid #22304c}
+.viewer .frame{height:65vh;width:100%;border:0}
+.blur{filter:blur(8px)}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.overlay .veil{background:rgba(10,16,30,.6);padding:10px 12px;border:1px solid #2b3b63;border-radius:10px}
+.builder-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+textarea,input[type=text]{width:100%}
+.small{font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title"><img id="siteLogo" class="logo" src="img/dave-logo.svg" alt="Dave logo" /><span class="badge">L3</span><h1>Past Paper Builder</h1></div>
+    <nav><a href="index.html">Home</a> <a href="past-papers.html">Past Papers</a> <a href="quiz.html">Quiz</a> <a href="revision.html">Revision</a></nav>
+  </header>
+
+  <div class="card section">
+    <h2 style="margin-top:0">1) Load PDFs</h2>
+    <div class="row">
+      <label>Question paper (PDF)
+        <input id="qPdf" type="file" accept="application/pdf" />
+      </label>
+      <label>Mark scheme (PDF)
+        <input id="msPdf" type="file" accept="application/pdf" />
+      </label>
+    </div>
+    <div class="viewers" style="margin-top:8px">
+      <div class="viewer">
+        <header><strong>Question Paper</strong>
+          <div class="small">Page <input id="qPage" type="number" min="1" value="1" style="width:80px" /> <button id="qGo">Go</button></div>
+        </header>
+        <iframe id="qFrame" class="frame" title="Question PDF"></iframe>
+      </div>
+      <div class="viewer">
+        <header><strong>Mark Scheme</strong>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="msReveal">Reveal/Hide</button>
+            <span class="small">Page <input id="msPage" type="number" min="1" value="1" style="width:80px" /> <button id="msGo">Go</button></span>
+          </div>
+        </header>
+        <div style="position:relative">
+          <iframe id="msFrame" class="frame blur" title="Mark scheme PDF"></iframe>
+          <div class="overlay" id="msOverlay"><div class="veil">🔒 Mark scheme hidden — click Reveal</div></div>
+        </div>
+      </div>
+    </div>
+    <p class="muted small" style="margin-top:6px">Tip: Page jump uses the built‑in viewer with <code>#page=</code> — works in most browsers. If it doesn’t, use the viewer’s own controls.</p>
+  </div>
+
+  <div class="card section">
+    <h2 style="margin-top:0">2) Build an MCQ</h2>
+    <div class="builder-grid">
+      <div>
+        <div class="row">
+          <label>Category
+            <select id="cat">
+              <option value="U1: Principles of CS">U1: Principles of CS</option>
+              <option value="U2: Computer Systems">U2: Computer Systems</option>
+              <option value="U3: Project Mgmt">U3: Project Mgmt</option>
+              <option value="U4: Software Dev Project">U4: Software Dev Project</option>
+              <option value="U6: Web Dev">U6: Web Dev</option>
+              <option value="U11: Cyber Security">U11: Cyber Security</option>
+              <option value="U13: Databases">U13: Databases</option>
+            </select>
+          </label>
+          <label>Learning Aim
+            <select id="aim">
+              <option value="">(not applicable)</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+            </select>
+          </label>
+          <label>Difficulty
+            <select id="diff">
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </label>
+        </div>
+        <label>Question
+          <textarea id="qText" rows="3" placeholder="Paste or write the stem..."></textarea>
+        </label>
+        <div class="row">
+          <label>Hint <input id="hint" type="text" placeholder="Short hint (optional)" /></label>
+          <label>Explanation <input id="exp" type="text" placeholder="Why this is correct (optional)" /></label>
+        </div>
+      </div>
+      <div>
+        <div class="row">
+          <label>A <input id="optA" type="text" /></label>
+          <label>B <input id="optB" type="text" /></label>
+        </div>
+        <div class="row">
+          <label>C <input id="optC" type="text" /></label>
+          <label>D <input id="optD" type="text" /></label>
+        </div>
+        <div class="row">
+          <label>Correct answer
+            <select id="correct">
+              <option value="0">A</option>
+              <option value="1">B</option>
+              <option value="2">C</option>
+              <option value="3">D</option>
+            </select>
+          </label>
+          <div style="display:flex;align-items:end;gap:8px">
+            <button id="add" class="btn-cta">Add to my bank</button>
+            <button id="clear">Clear</button>
+          </div>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <button id="exportJSON">Export my questions (JSON)</button>
+          <label>Import JSON <input id="importJSON" type="file" accept="application/json" /></label>
+          <a id="startCustom" href="#"><button>Start quick test (custom only)</button></a>
+        </div>
+        <p class="muted small" id="customCount">You have 0 custom questions saved on this device.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer><a href="welcome.html">Welcome</a></footer>
+</div>
+</body>
+</html>

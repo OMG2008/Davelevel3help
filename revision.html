@@ -7,11 +7,12 @@
 <title>Revision — L3 Computing</title>
 <link rel="stylesheet" href="css/styles.css" />
 <script type="module" src="js/revision.js" defer></script>
+<script type="module" src="js/theme.js"></script>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <div class="title">
+    <div class="title"><img id="siteLogo" class="logo" src="img/dave-logo.svg" alt="Dave logo" />
       <span class="badge">L3</span>
       <h1>Revision (Flashcards)</h1>
     </div>
@@ -61,5 +62,6 @@
 
   <footer><a href="index.html">Back to Home</a></footer>
 </div>
+<script type="module">import {initTheme} from './js/theme.js'; initTheme();</script>
 </body>
 </html>

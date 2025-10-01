@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Past Papers — Dave Level 3</title>
+<link rel="stylesheet" href="css/styles.css" />
+<script type="module" src="js/theme.js"></script>
+<script type="module" src="js/papers.js"></script>
+<script type="module">
+  import {initTheme} from './js/theme.js';
+  import {paperPacks, buildQuizHref} from './js/papers.js';
+  initTheme();
+  window.addEventListener('DOMContentLoaded', ()=>{
+    const list = document.getElementById('packs');
+    list.innerHTML = paperPacks.map(pk=>`
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+          <div>
+            <div class="pill">Topic-aligned Pack</div>
+            <h3 style="margin:.4rem 0 0">${pk.title}</h3>
+            <p class="muted" style="margin:.4rem 0 0">${pk.note}</p>
+            <p class="muted" style="margin:.3rem 0 0">Settings: <strong>${pk.qty}Q</strong> • ${pk.secs}s per Q • ${pk.diff.toUpperCase()}</p>
+          </div>
+          <div style="display:flex;gap:8px">
+            <a href="${buildQuizHref(pk,{shuffle:true})}"><button class="btn-cta">Start (Shuffled)</button></a>
+            <a href="${buildQuizHref(pk,{shuffle:false})}"><button>Start (Paper order)</button></a>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  });
+</script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title"><img id="siteLogo" class="logo" src="img/dave-logo.svg" alt="Dave logo" /><span class="badge">L3</span><h1>Past Papers</h1></div>
+    <nav><a href="index.html">Home</a> <a href="quiz.html">Quiz</a> <a href="revision.html">Revision</a> <a href="online.html">Online</a> <a href="buzzer.html">Buzzer</a></nav>
+  </header>
+
+  <div class="card" style="margin-bottom:12px">
+    <p class="muted">These sets are <strong>inspired by the official past papers</strong> you provided — they’re <em>not verbatim questions</em>, but match the topics and difficulty so you can practise fairly.</p>
+  </div>
+
+  <div id="packs" class="grid"></div>
+
+  <div class="card" style="margin-top:12px"><a href="builder.html"><button class="btn-cta">Open Past Paper Builder</button></a></div>
+
+  <div class="card" style="margin-top:12px">
+    <h3 style="margin-top:0">Use your own PDF</h3>
+    <p class="muted">Want to practise from a new paper? Open the PDF in another tab and build a quick topic pack using the Preset dropdown on the Quiz page. You can also add your own MCQs via the custom question feature (saved to your browser).</p>
+    <div><a href="quiz.html"><button>Go to Quiz</button></a></div>
+  </div>
+
+  <footer><a href="welcome.html">Welcome</a></footer>
+</div>
+</body>
+</html>

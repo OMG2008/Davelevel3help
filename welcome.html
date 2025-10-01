@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Welcome to Dave Level 3 Help Guide</title>
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+.hero{display:grid;place-items:center;min-height:70vh;text-align:center}
+.hero h1{font-size:clamp(28px,6vw,56px);margin:0;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);font-size:clamp(14px,2.2vw,18px)}
+</style>
+<script type="module" src="js/theme.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title"><img id="siteLogo" class="logo" src="img/dave-logo.svg" alt="Dave logo" /><span class="badge">L3</span><h1>Dave Level 3 Help Guide</h1></div>
+    <nav><a href="index.html">Home Hub</a></nav>
+  </header>
+  <section class="hero card"><div class="pill" style="margin-bottom:10px">Your Level 3 companion</div>
+    <h1>Welcome to Dave Level 3 Help Guide</h1>
+    <p>Your fun, interactive place for quizzes, flashcards, and multiplayer battles.</p>
+    <div style="margin-top:16px">
+      <a href="index.html"><button class="btn-cta">Enter the Hub ▶</button></a>
+    </div>
+  
+  <div class="card" style="margin-top:16px">
+    <h2 style="margin-top:0">Quick links</h2>
+    <div class="row">
+      <a href="quiz.html"><button class="btn-cta">Start Quiz ▶</button></a>
+      <a href="revision.html"><button>Revision (Flashcards)</button></a>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <a href="online.html"><button>Online Multiplayer</button></a>
+      <a href="buzzer.html"><button>Buzzer (Fastest Finger)</button></a>
+    </div>
+  </div>
+
+    <div class="card" style="margin-top:12px">
+      <h2 style="margin:0 0 8px">Branding</h2>
+      <div class="row">
+        <label>Theme
+          <select id="themePicker"></select>
+        </label>
+        <label>Custom Logo (PNG/SVG)
+          <input id="logoUpload" type="file" accept=".png,.svg,.jpg,.jpeg" />
+        </label>
+      </div>
+      <p class="muted">Tip: Theme + logo are saved in your browser (localStorage) and apply across all pages.</p>
+    </div>
+    <script type="module">
+      import {initTheme, handleThemePicker, handleLogoUpload} from './js/theme.js';
+      initTheme(); handleThemePicker(); handleLogoUpload();
+    </script>
+    
+</section>
+
+  <footer>Made for Dave’s Level 3 Computing course.</footer>
+</div>
+</body>
+</html>

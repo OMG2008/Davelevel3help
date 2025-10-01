@@ -7,11 +7,13 @@
 <title>Quiz — L3 Computing</title>
 <link rel="stylesheet" href="css/styles.css" />
 <script type="module" src="js/quiz.js" defer></script>
+<script type="module" src="js/presets.js"></script>
+<script type="module" src="js/theme.js"></script>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <div class="title">
+    <div class="title"><img id="siteLogo" class="logo" src="img/dave-logo.svg" alt="Dave logo" />
       <span class="badge">L3</span>
       <h1>Quiz</h1>
     </div>
@@ -22,6 +24,12 @@
     <div class="card section">
       <h2>Choose your challenge</h2>
       <div class="row">
+  <label>Preset
+    <select id="preset"></select>
+  </label>
+  <div style="display:flex;align-items:end"><button id="applyPreset">Apply Preset</button></div>
+</div>
+<div class="row">
         <label>Play Type
           <select id="playType">
             <option value="single">Single Player</option>
@@ -126,6 +134,7 @@
     <h2>Quiz complete 🎉</h2>
     <p id="final"></p>
     <div class="row" style="margin-top:10px">
+      <div style="display:flex;align-items:end"><button id="exportCSV">Download CSV</button></div>
       <label>Save to leaderboard
         <input id="playerName" type="text" maxlength="20" placeholder="O.G."/>
       </label>
@@ -138,5 +147,6 @@
 
   <footer><a href="index.html">Back to Home</a></footer>
 </div>
+<script type="module">import {initTheme} from './js/theme.js'; initTheme();</script>
 </body>
 </html>

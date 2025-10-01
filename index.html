@@ -6,13 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>L3 Computing — Home</title>
 <link rel="stylesheet" href="css/styles.css" />
+<script type="module" src="js/theme.js"></script>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <div class="title">
+    <div class="title"><img id="siteLogo" class="logo" src="img/dave-logo.svg" alt="Dave logo" />
       <span class="badge">L3</span>
-      <h1>Level 3 Computing — Revision Hub</h1>
+      <h1>Level 3 Computing — Revision Hub</h1><div class="pill">See the <a href="welcome.html" style="color:var(--acc)">Welcome page</a></div>
     </div>
   </header>
 
@@ -26,6 +27,8 @@
       </div>
       <div class="row" style="margin-top:10px">
         <a href="online.html"><button>Online Multiplayer</button></a>
+        <a href="past-papers.html"><button>Past Papers</button></a>
+        <a href="builder.html"><button>Past Paper Builder</button></a>
         <a href="buzzer.html"><button>Buzzer (Fastest Finger)</button></a>
         <a href="https://firebase.google.com/" target="_blank"><button>Get Firebase (for online)</button></a>
       </div>
@@ -40,7 +43,24 @@
         <li>Leitner flashcards for spaced repetition</li>
       </ul>
     </div>
-  </div>
+  
+    <div class="card" style="margin-top:12px">
+      <h2 style="margin:0 0 8px">Branding</h2>
+      <div class="row">
+        <label>Theme
+          <select id="themePicker"></select>
+        </label>
+        <label>Custom Logo (PNG/SVG)
+          <input id="logoUpload" type="file" accept=".png,.svg,.jpg,.jpeg" />
+        </label>
+      </div>
+      <p class="muted">Tip: Theme + logo are saved in your browser (localStorage) and apply across all pages.</p>
+    </div>
+    <script type="module">
+      import {initTheme, handleThemePicker, handleLogoUpload} from './js/theme.js';
+      initTheme(); handleThemePicker(); handleLogoUpload();
+    </script>
+    
   <footer>© Level 3 Computing Quiz — built for fun practice.</footer>
 </div>
 </body>

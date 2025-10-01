@@ -1,10 +1,13 @@
 
 import {builtIn} from './bank.js';
+import './bank_extra.js';
+import {presets, applyPresetTo} from './presets.js';
 import {el, shuffle, isBTECUnit, popToast} from './utils.js';
 
 let pool=[], current=0, secsEach=30, timerId=null, timeLeft=0;
 let playType='single', players=[], me=null;
 let score=0, streak=0; // single-player
+let sessionLog=[];
 
 const category=el('category'), aimSel=el('aim'), difficulty=el('difficulty'), secs=el('secs'), qty=el('qty');
 const playTypeSel=el('playType'), localCount=el('localCount'), localNames=el('localNames');
@@ -19,12 +22,15 @@ function setProgress(){ bar.style.width = `${(current)/(pool.length)*100}%` }
 function setTimer(){ timeEl.textContent=timeLeft }
 
 function pickPool(){
-  const all=[...builtIn,...getCustom()];
+  const params = new URLSearchParams(location.search);
+  const src = params.get('src')||'';
+
+  const all = (src==='custom') ? [...getCustom()] : [...builtIn, ...getCustom()];
   const cat=category.value, diff=difficulty.value, aim=aimSel.value;
   let f=all.filter(q=> (cat==='all'||q.cat===cat));
   if(diff!=='mix') f=f.filter(q=> q.diff===diff);
   if(isBTECUnit(cat) && aim!=='all') f=f.filter(q=> (q.aim||'')===aim);
-  return shuffle(f).slice(0, Math.max(5, Math.min(+qty.value||12, 50)));
+  const lim=Math.max(5, Math.min(+qty.value||12, 50)); const arr=(window.__paperOrder? f : shuffle(f)); return arr.slice(0, lim);
 }
 
 playTypeSel.addEventListener('change',()=>{
@@ -49,6 +55,27 @@ category.addEventListener('change',()=>{
 });
 category.dispatchEvent(new Event('change'));
 
+// URL param prefill
+(function(){
+  const p = new URLSearchParams(location.search);
+  if(p.has('cat')) category.value = p.get('cat');
+  if(p.has('aim')) aimSel.value = p.get('aim');
+  if(p.has('diff')) difficulty.value = p.get('diff');
+  if(p.has('qty')) qty.value = +p.get('qty') || qty.value;
+  if(p.has('secs')) secs.value = +p.get('secs') || secs.value;
+  const title = p.get('title'); if(title){ const h = document.querySelector('header h1'); if(h) h.textContent = 'Quiz — '+title; }
+  const shuf = p.get('shuffle'); if(shuf==='0'){ window.__paperOrder=true; }
+  category.dispatchEvent(new Event('change'));
+})();
+
+
+// Presets
+const presetSel = el('preset'); const applyBtn = el('applyPreset');
+function populatePresets(){ if(!presetSel) return; presetSel.innerHTML = Object.keys(presets).map(k=>`<option value="${k}">${k}</option>`).join(''); }
+populatePresets();
+applyBtn.onclick = ()=>{ const key=presetSel.value; applyPresetTo(null, presets[key]); };
+
+
 function updateTurnTag(){
   if(playType==='local'){
     const idx = current % players.length; me = players[idx];
@@ -71,6 +98,7 @@ function updateLifelines(disable=false){
 }
 
 function start(){
+  sessionLog=[];
   pool=pickPool(); current=0; secsEach=Math.max(10, Math.min(+secs.value||30, 120));
   if(playType==='single'){ players=[{id:'p1',name:'You',score:0,streak:0}]; me=players[0]; score=0; streak=0; scoreEl.textContent=0; streakEl.textContent='🔥 0'; }
   if(playType==='local'){
@@ -101,6 +129,8 @@ function next(){
 
 function lockOptions(){ [...options.children].forEach(b=>b.disabled=true); }
 function choose(i){
+  const startAt = Date.now();
+
   clearInterval(timerId); lockOptions();
   const q=pool[current]; const correct=(i===q.correct);
   [...options.children].forEach((b,idx)=>{ if(idx===q.correct) b.classList.add('correct'); if(idx===i && !correct) b.classList.add('wrong'); });
@@ -111,6 +141,8 @@ function choose(i){
     if(correct){ me.streak=(me.streak||0)+1; const gained=Math.round(100+(timeLeft*2)+Math.min((me.streak||0)*10,100)); me.score=(me.score||0)+gained; renderScorePanel(); popToast(`+${gained} pts for ${me.name}`); }
     else { me.streak=0; }
   }
+  // log
+  sessionLog.push({q:pool[current].q, cat:pool[current].cat, aim:pool[current].aim||'', diff:pool[current].diff, chosen:i, correctIdx:pool[current].correct, correct: (i===pool[current].correct)});
   reveal(correct,false);
 }
 function reveal(correct,timeout){
@@ -147,3 +179,15 @@ window.addEventListener('keydown', (e)=>{
   if(e.key.toLowerCase()==='f' && !fiftyBtn.disabled) fiftyBtn.click();
   if(e.key.toLowerCase()==='s' && !skipBtn.disabled) skipBtn.click();
 });
+
+
+// Export CSV
+const exportBtn = document.getElementById('exportCSV');
+if(exportBtn){
+  exportBtn.onclick = ()=>{
+    const rows = [["Question","Category","Aim","Diff","Chosen","CorrectIdx","Correct?"]].concat(
+      sessionLog.map(r=>[r.q, r.cat, r.aim, r.diff, String.fromCharCode(65+(r.chosen??-1)), r.correctIdx, r.correct])
+    );
+    import('./utils.js').then(u=>u.exportCSV('quiz-session.csv', rows));
+  };
+}

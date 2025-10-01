@@ -8,3 +8,12 @@ export function popToast(msg){
   const d=document.createElement('div'); d.textContent=msg; d.style.marginTop='8px'; d.style.padding='10px 14px'; d.style.background='#0f1626'; d.style.border='1px solid #2b3b63'; d.style.borderRadius='10px';
   t.appendChild(d); setTimeout(()=>{d.style.transition='opacity .5s'; d.style.opacity='0'; setTimeout(()=>d.remove(),500)},1200);
 }
+
+
+export function exportCSV(filename, rows){
+  const esc = (v)=>(''+v).replace(/"/g,'""');
+  const csv = rows.map(r=>r.map(esc).map(v=>`"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=filename; a.click(); setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}

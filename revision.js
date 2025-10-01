@@ -1,5 +1,6 @@
 
 import {builtIn} from './bank.js';
+import './bank_extra.js';
 import {el, shuffle, isBTECUnit} from './utils.js';
 
 let deck=[], fcIdx=0, leitner=JSON.parse(localStorage.getItem('l3_leitner')||'{}');

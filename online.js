@@ -1,9 +1,11 @@
 
 import {builtIn} from './bank.js';
+import './bank_extra.js';
+import {presets, applyPresetTo} from './presets.js';
 import {el, shuffle, isBTECUnit, popToast} from './utils.js';
 
 let db=null, roomRef=null, unsub=null;
-let me={id:null,name:'Player'}; let players=[]; let pool=[]; let current=0;
+let me={id:null,name:'Player'}; let players=[]; let pool=[]; let current=0; let onlineLog=[];
 
 const firebaseConfig = null; // <-- paste your Firebase web config object here
 function initFirebase(){
@@ -52,10 +54,11 @@ async function joinRoom(){ if(!db){ popToast('Add Firebase config first'); retur
 
 function subscribe(){ if(unsub) unsub(); unsub=roomRef.onSnapshot(s=>{ const d=s.data(); if(!d) return; players=d.players||[]; el('onlinePlayers').textContent=players.length; el('playersList').textContent=players.map(p=>p.name).join(', '); if(d.state==='playing'){ pool=d.pool||[]; current=d.current?.idx||0; show(d.current); } if(d.state==='finished'){ el('game').classList.add('hidden'); popToast('Game finished'); } }); }
 
-async function hostStart(){ if(!db||!roomRef){ popToast('Create a room first'); return } pool=pickPool(); await roomRef.update({ state:'playing', pool, current:{idx:0, start: Date.now(), dur: 25} }); document.getElementById('game').classList.remove('hidden'); }
+async function hostStart(){ if(!db||!roomRef){ popToast('Create a room first'); return } pool=pickPool(); await roomRef.update({ state:'playing', pool, current:{idx:0, start: Date.now(), dur: 25}, settings:{neg:(el('oneg').value==='on'), pen: Math.max(10, +el('open').value||50)} })); document.getElementById('game').classList.remove('hidden'); }
 async function hostNext(){ const nextIdx=current+1; if(nextIdx>=pool.length){ await roomRef.update({ state:'finished' }); return } await roomRef.update({ current:{idx:nextIdx, start: Date.now(), dur: 25} }); }
 
 async function answer(i){ const q=pool[current]; const correct=(i===q.correct);
+  onlineLog.push({q:q.q, cat:q.cat, aim:q.aim||'', chosen:i, correctIdx:q.correct, correct});
   [...options.children].forEach((b,idx)=>{ b.disabled=true; if(idx===q.correct) b.classList.add('correct'); if(idx===i && !correct) b.classList.add('wrong'); });
   if(correct){
   const cur = (await roomRef.get()).data().current || {start: Date.now(), dur: 25};
@@ -74,3 +77,15 @@ document.getElementById('hostNext').onclick=hostNext;
 
 category.addEventListener('change',()=>{ const enable=isBTECUnit(category.value); el('aim').disabled=!enable; el('aim').parentElement.style.opacity=enable?1:.6; });
 category.dispatchEvent(new Event('change'));
+const presetSel = el('preset'); const applyBtn = el('applyPreset');
+function populatePresets(){ if(!presetSel) return; presetSel.innerHTML = Object.keys(presets).map(k=>`<option value="${k}">${k}</option>`).join(''); }
+populatePresets();
+applyBtn.onclick = ()=>{ const key=presetSel.value; applyPresetTo(null, presets[key]); };
+
+
+document.getElementById('exportOnline').onclick = ()=>{
+  const rows = [["Question","Category","Aim","Chosen","CorrectIdx","Correct?"]].concat(
+    onlineLog.map(r=>[r.q, r.cat, r.aim||'', String.fromCharCode(65+(r.chosen??-1)), r.correctIdx, r.correct])
+  );
+  import('./utils.js').then(u=>u.exportCSV('online-my-answers.csv', rows));
+};

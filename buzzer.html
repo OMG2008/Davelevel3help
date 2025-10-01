@@ -7,11 +7,12 @@
 <title>Buzzer Mode — L3 Computing</title>
 <link rel="stylesheet" href="css/styles.css" />
 <script type="module" src="js/buzzer.js" defer></script>
+<script type="module" src="js/theme.js"></script>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <div class="title"><span class="badge">L3</span><h1>Buzzer — Fastest Finger</h1></div>
+    <div class="title"><img id="siteLogo" class="logo" src="img/dave-logo.svg" alt="Dave logo" /><span class="badge">L3</span><h1>Buzzer — Fastest Finger</h1></div>
     <nav><a href="index.html">Home</a> <a href="quiz.html">Quiz</a> <a href="revision.html">Revision</a> <a href="online.html">Online</a></nav>
   </header>
 
@@ -47,6 +48,17 @@
       </label>
     </div>
     <div class="row">
+      <label>Negative marking
+        <select id="neg">
+          <option value="off">Off</option>
+          <option value="on">On</option>
+        </select>
+      </label>
+      <label>Penalty (points)
+        <input id="pen" type="number" min="10" max="200" value="50" />
+      </label>
+    </div>
+    <div class="row">
       <label>Questions
         <input id="qty" type="number" min="5" max="50" step="1" value="12" />
       </label>
@@ -78,8 +90,9 @@
       <p id="info" class="muted"></p>
     </div>
     <div id="players" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px"></div>
-    <div style="margin-top:10px"><button id="nextQ" class="btn-cta hidden">Next question →</button></div>
+    <div style="margin-top:10px;display:flex;gap:8px"><button id="nextQ" class="btn-cta hidden">Next question →</button><button id="exportBuzzer">Download Scores CSV</button></div>
   </div>
 </div>
+<script type="module">import {initTheme} from './js/theme.js'; initTheme();</script>
 </body>
 </html>

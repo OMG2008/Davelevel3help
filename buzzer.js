@@ -2,7 +2,7 @@
 import {builtIn} from './bank.js';
 import {el, shuffle, isBTECUnit, popToast} from './utils.js';
 
-let pool=[], current=0, qDur=25, timerId=null, startTime=0, lockBuzz=false;
+let pool=[], current=0, qDur=25, timerId=null, startTime=0, lockBuzz=false; let neg=false, pen=50;
 let players=[], buzzKeys=['A','L','S','K','D','J','F',';'];
 
 const category=el('category'), aimSel=el('aim'), difficulty=el('difficulty'), qty=el('qty');
@@ -25,6 +25,7 @@ function layoutPlayers(){
 }
 
 function start(){
+  neg = (el('neg').value==='on'); pen = Math.max(10, +el('pen').value||50);
   pool=pickPool(); current=0; qDur=Math.max(10, Math.min(+qSecs.value||25, 90));
   const n=Math.max(2, Math.min(8, +pCount.value||3));
   players=[]; for(let i=0;i<n;i++){ players.push({name:`P${i+1}`, key:buzzKeys[i], score:0, locked:false}); }
@@ -35,7 +36,7 @@ function start(){
 
 function next(){
   clearInterval(timerId); info.textContent=''; lockBuzz=false; players.forEach(p=>p.locked=false);
-  if(current>=pool.length){ info.textContent='Game over!'; el('nextQ').classList.add('hidden'); return; }
+  if(current>=pool.length){ info.textContent='Game over!'; el('nextQ').classList.add('hidden'); el('exportBuzzer').classList.remove('hidden'); return; }
   const q=pool[current];
   qtext.textContent=q.q; tags.textContent = `${q.cat}${q.aim?` • Aim ${q.aim}`:''} • ${q.diff.toUpperCase()}`;
   opts.innerHTML='';
@@ -97,7 +98,8 @@ function onBuzz(key){
         [...opts.children].forEach((b,i)=>{ b.disabled=true; if(i===q.correct) b.classList.add('correct'); else if(i===idx) b.classList.add('wrong'); });
         info.textContent = `✅ ${p.name} correct! +${pts} pts`;
         current++; lockBuzz=true; el('nextQ').classList.remove('hidden');
-      } else {
+       } else {
+        if(neg){ p.score = Math.max(0, (p.score||0) - pen); }
         p.locked=true;
         layoutPlayers();
         [...opts.children].forEach(b=>b.disabled=true);
@@ -115,3 +117,10 @@ window.addEventListener('keydown', (e)=>{
 
 el('start').onclick=start;
 el('nextQ').onclick=next;
+
+
+// Export scores CSV
+document.getElementById('exportBuzzer').onclick = ()=>{
+  const rows = [["Player","Score","Key"]].concat(players.map(p=>[p.name, p.score, p.key]));
+  import('./utils.js').then(u=>u.exportCSV('buzzer-scores.csv', rows));
+};
